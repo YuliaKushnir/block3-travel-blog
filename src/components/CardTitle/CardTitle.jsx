@@ -9,6 +9,9 @@ const getClasses = createUseStyles(theme => ({
     gap: `${theme.spacing(2)}px`,
     justifyContent: 'space-between',
     padding: `0px ${theme.spacing(2)}px`,
+    fontFamily: "'Raleway', sans-serif",
+    fontSize: '26px',
+    fontWeight: 600,
   },
 }));
 

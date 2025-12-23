@@ -1,13 +1,13 @@
 import DefaultPage from 'pages/default';
 import React from 'react';
-
-import PageContainer from './components/PageContainer';
+import MainPageContainer from './components/MainPageContainer';
 
 const Default = (props) => {
+
   return (
-    <PageContainer>
+    <MainPageContainer>
       <DefaultPage {...props} />
-    </PageContainer>
+    </MainPageContainer>
   );
 };
 

@@ -16,10 +16,13 @@ const IconButton = ({
   onClick,
   onPress,
   onRelease,
+  className,
+  sx: sxOverride,
 }) => {
   const { theme } = useTheme();
   return (
     <IconButtonMUI
+      className={className}
       disabled={disabled}
       onClick={onClick}
       onMouseDown={onPress}
@@ -33,10 +36,11 @@ const IconButton = ({
             background: theme.button.color[colorVariant].backgroundHovered,
           },
           background: theme.button.color[colorVariant].background,
-          color: theme.button.color[colorVariant].text,
-          padding: `${theme.spacing(0.5)}px`,
+          color: theme.button.color[colorVariant].text.secondary,
+          padding: `${theme.spacing(1)}px`,
           opacity: disabled && '0.4',
         },
+        ...sxOverride,
       }}
     >
       {children}

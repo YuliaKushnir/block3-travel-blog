@@ -1,3 +1,24 @@
 {
-  "title": "This is the first page that visitors to your site will see, place all the information they need here"
+  "title": "Travel Notes Blog",
+  "discoverStories": "Discover stories from our local experts, destination guides, and travel inspiration from Italy, Greece, and beyond.",
+  "postsList": "Recent Posts",
+  "loading": "Loading...",
+  "deleteConfirmation": "Are you sure you want to delete this post?",
+  "confirm": "confirm",
+  "cancel": "Cancel",
+  "createPost": "Сreate post",
+  "rating": "Rating",
+  "country": "Country",
+  "category": "Categories",
+  "author": "Author",
+  "page": "page ",
+  "of": "of ",
+  "previousPage": "previous",
+  "nextPage": "next",
+  "less": "Less",
+  "more": "More",
+  "rating45": "4.5 & more",
+  "rating4": "4 & more",
+  "rating35": "3.5 & more"
+
 }

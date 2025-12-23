@@ -23,6 +23,17 @@ const Dialog = ({
       onClose={onClose}
       open={open}
       maxWidth={maxWidth}
+      sx={{
+        '& .MuiDialog-paper': {
+          height: '30vh',
+          maxHeight: '80vh',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          gap: 4,
+        },
+      }}
+
     >
       {children}
     </DialogMui>

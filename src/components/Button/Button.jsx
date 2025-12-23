@@ -30,6 +30,7 @@ function Button({
   onClick,
   startIcon,
   variant = variants.secondary,
+  fontSize = '18px',
 }) {
   const { theme } = useTheme();
   return (
@@ -55,6 +56,9 @@ function Button({
               color: theme.button.color[colorVariant].text,
               opacity: disabled && '0.4',
               textTransform: 'none',
+              fontFamily: "'Quicksand', sans-serif",
+              fontSize,
+              padding: '8px 22px', 
               '&:hover': {
                 background: theme.button.color[colorVariant].backgroundHovered,
               },

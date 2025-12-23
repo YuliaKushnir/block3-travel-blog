@@ -25,12 +25,28 @@ import Header from '../components/Header';
 import IntlProvider from '../components/IntlProvider';
 import MissedPage from '../components/MissedPage';
 import SearchParamsConfigurator from '../components/SearchParamsConfigurator';
+import { fetchPosts } from 'app/actions/posts';
+import { fetchUsers } from 'app/actions/users';
+import { useInitPosts } from 'misc/hooks/useInitPosts';
+import { useInitUsers } from 'misc/hooks/useInitUsers';
+import { useInitFilters } from 'misc/hooks/useInitFilterFields';
+import FiltersProvider from 'misc/providers/FiltersProvider';
+import Notification from 'pages/secret/component/Notification';
 
 function App() {
   const dispatch = useDispatch();
   const [state, setState] = useState({
     componentDidMount: false,
   });
+
+  useInitPosts();
+  useInitUsers();
+  useInitFilters();
+
+  useEffect(() => {
+    dispatch(fetchPosts());
+    dispatch(fetchUsers());
+  }, [dispatch]);
 
   const {
     errors,
@@ -56,6 +72,8 @@ function App() {
     <UserProvider>
       <AuthoritiesProvider>
         <ThemeProvider>
+          <FiltersProvider>
+            <Notification/>
           <BrowserRouter>
             <SearchParamsConfigurator />
             {/* This is needed to let first render passed for App's
@@ -77,7 +95,11 @@ function App() {
                     />
                     <Route
                       element={<SecretPage />}
-                      path={`${pageURLs[pages.secretPage]}`}
+                      path={`${pageURLs[pages.secretPage]}/new`}
+                    />
+                    <Route
+                      element={<SecretPage />}
+                      path={`${pageURLs[pages.secretPage]}/:id`}
                     />
                     <Route
                       element={(
@@ -126,6 +148,7 @@ function App() {
               </IntlProvider>
             )}
           </BrowserRouter>
+          </FiltersProvider>
         </ThemeProvider>
       </AuthoritiesProvider>
     </UserProvider>

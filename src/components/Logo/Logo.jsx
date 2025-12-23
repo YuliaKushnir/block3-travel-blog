@@ -45,7 +45,7 @@ function Logo({
       {!compact && (
         <div className={classes.label}>
           <strong>
-            UI app. Base
+            Travel blog
           </strong>
         </div>
       )}
@@ -53,11 +53,11 @@ function Logo({
         <div className={classes.labelCompactContainer}>
           <div className={classes.labelCompactMain}>
             <strong>
-              The Game
+              Travel blog
             </strong>
           </div>
           <div className={classes.labelCompactSub}>
-            Lands of Derelict
+            World in my heart
           </div>
         </div>
       )}
