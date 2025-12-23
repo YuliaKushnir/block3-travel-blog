@@ -40,6 +40,7 @@ const getClasses = createUseStyles((theme) => ({
     width: '100%',
   },
   hover: {
+    backgroundColor: theme.header.color.background,
     padding: `${theme.spacing(0.5)}px ${theme.spacing(1)}px`,
   },
   selectedLang: {

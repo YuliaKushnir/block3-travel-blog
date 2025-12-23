@@ -13,6 +13,11 @@ const setItem = (key, value) => {
 export const keys = {
   TOKEN: 'TOKEN',
   TOKEN_EXPIRATION: 'TOKEN_EXP',
+  POSTS: 'POSTS',
+  USERS: 'USERS',
+  COUNTRIES: 'COUNTRIES',
+  CATEGORIES: 'CATEGORIES'
+  
 };
 
 const forExport = {

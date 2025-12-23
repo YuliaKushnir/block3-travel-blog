@@ -93,6 +93,8 @@ const TextField = ({
           display: 'none',
         },
         '& .MuiInputBase-root': {
+          fontFamily: "'Quicksand', sans-serif",
+          fontSize: '18px',
           background: disabled && 'rgba(0, 0, 0, 0.05) !important',
           borderBottom: `1px solid ${isError
             ? theme.colors.text.error

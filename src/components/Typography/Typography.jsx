@@ -26,7 +26,10 @@ const variants = {
   caption: 'caption',
   default: 'default',
   subTitle: 'subTitle',
-  title: 'title'
+  title: 'title',
+  h1: 'h1',
+  h3: 'h3',
+  h4: 'h4',
 };
 
 const Typography = ({
