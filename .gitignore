@@ -10,8 +10,6 @@
 # testing
 /coverage
 
-.github
-
 # production
 /build
 
