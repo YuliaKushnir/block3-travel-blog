@@ -82,7 +82,7 @@ const rightPanelItemTypes = {
   LANGUAGE: 'language',
   LOGIN: 'login',
   SEPARATOR: 'separator',
-  USER_NAME: 'userName',
+  USER_NAME: 'user.name',
 };
 
 function Header({
@@ -96,7 +96,8 @@ function Header({
   const isMobile = useIsMobile();
   const langsMenuRef = useRef(null);
   const locationSearch = useLocationSearch();
-  const user = useSelector(({ user: reducerUser }) => reducerUser);
+  const { user, isAuthenticated, isFetchingUser } = useSelector(state => state.user);
+
   const userMenuRef = useRef(null);
 
   const [state, setState] = useState({
@@ -104,16 +105,11 @@ function Header({
     isUserMenuOpened: false,
   });
 
-  const userName = user.firstName || user.login;
-
   const actualOrderedRightPanelItemTypes = useMemo(() => {
     const result = [];
-    if (user.isAuthorized) {
+    if (isAuthenticated) {
       result.push(rightPanelItemTypes.USER_NAME);
-    } else if (
-      !user.isFetchingUser
-      && currentPage !== pages.login
-    ) {
+    } else if (!isFetchingUser && currentPage !== pages.login) {
       result.push(rightPanelItemTypes.LOGIN);
     }
     result.push(rightPanelItemTypes.LANGUAGE);
@@ -124,22 +120,15 @@ function Header({
       acc.push(item);
       return acc;
     }, []);
-  }, [user, currentPage]);
+  }, [user, isAuthenticated, currentPage]);
 
   return (
     <div className={classes.container}>
       <div className={classes.content}>
         <div className={classes.toolBarContainerLeft}>
           <LeftNavBar />
-          <Link
-            to={{
-              pathname: `${pagesURLs[pages.defaultPage]}`,
-            }}
-          >
-            <Hover
-              light
-              selected={currentPage === pages.defaultPage}
-            >
+          <Link to={{ pathname: `${pagesURLs[pages.defaultPage]}`, }} >
+            <Hover light selected={currentPage === pages.defaultPage} >
               <div className={classes.hover}>
                 <Logo compact={isMobile} />
               </div>
@@ -151,54 +140,24 @@ function Header({
             <>
               {itemType === rightPanelItemTypes.USER_NAME && (
                 <div ref={userMenuRef}>
-                  <Hover
-                    light
-                    onClick={() => setState({
-                      ...state,
+                  <Hover light
+                    onClick={() => setState({ ...state,
                       isUserMenuOpened: true,
                     })}
-                    selected={state.isUserMenuOpened}
-                  >
+                    selected={state.isUserMenuOpened} >
                     <div className={classes.hover}>
-                      <div
-                        className={isMobile ? classes.userNameMobile : ''}
-                      >
-                        <Typography
-                          color="paper"
-                          noWrap
-                          variant="subtitle"
-                        >
-                          {!isMobile
-                            ? (
-                              <strong>
-                                {userName}
-                              </strong>
-                            )
-                            : userName
-                          }
-                        </Typography>
+                      <div className={isMobile ? classes.userNameMobile : ''} >
+                        <Typography color="paper" noWrap variant="subtitle"> {!isMobile ? ( <strong> {user?.name} </strong> ) : user?.name } </Typography>
                       </div>
                     </div>
                   </Hover>
                 </div>
               )}
               {itemType === rightPanelItemTypes.LOGIN && (
-                <Link
-                  to={{
-                    pathname: `${pagesURLs[pages.login]}`,
-                  }}
-                >
-                  <Button
-                    colorVariant="header"
-                    variant="text"
-                  >
-                    <Typography
-                      color="inherit"
-                      variant="subtitle"
-                    >
-                      <strong>
-                        {formatMessage({ id: 'signIn' })}
-                      </strong>
+                <Link to={{ pathname: `${pagesURLs[pages.login]}`, }} >
+                  <Button colorVariant="header"  variant="text" >
+                    <Typography color="inherit" variant="subtitle" >
+                      <strong> {formatMessage({ id: 'signIn' })} </strong>
                     </Typography>
                   </Button>
                 </Link>
@@ -206,68 +165,30 @@ function Header({
               {itemType === rightPanelItemTypes.LANGUAGE && (
                 <>
                   <div className={classes.selectedLang}>
-                    <Typography
-                      color="paper"
-                      noWrap
-                    >
-                      {(isMobile
-                        ? interfaceLagsTranslateShort
-                        : interfaceLagsTranslate
-                      )[locationSearch.lang]}
-                    </Typography>
+                    <Typography color="paper" noWrap > {(isMobile ? interfaceLagsTranslateShort : interfaceLagsTranslate )[locationSearch.lang]} </Typography>
                   </div>
                   <div ref={langsMenuRef}>
-                    <IconButton
-                      colorVariant="header"
-                      onClick={() => setState({
-                        ...state,
-                        isLangsMenuOpened: true,
-                      })}
-                    >
-                      <IconGlobus
-                        color="header"
-                        size={32}
-                      />
+                    <IconButton colorVariant="header" onClick={() => setState({ ...state, isLangsMenuOpened: true, })} >
+                      <IconGlobus color="header" size={32} />
                     </IconButton>
                   </div>
                 </>
               )}
               {itemType === rightPanelItemTypes.SEPARATOR && (
-                <Typography
-                  color="paper"
-                  variant="subtitle"
-                >
-                  <strong>
-                    |
-                  </strong>
-                </Typography>
+                <Typography  color="paper" variant="subtitle" > <strong> | </strong> </Typography>
               )}
             </>
           ))}
         </div>
-        <Menu
-          anchorEl={langsMenuRef.current}
-          colorVariant="header"
-          open={state.isLangsMenuOpened}
-          onClose={() => setState({
+        <Menu anchorEl={langsMenuRef.current} colorVariant="header" open={state.isLangsMenuOpened} onClose={() => setState({
             ...state,
             isLangsMenuOpened: false,
           })}
         >
           {orderedInterfaceLangs.map(lang => (
-            <MenuItem
-              onClick={() => {
-                changePage({
-                  locationSearch: {
-                    ...locationSearch,
-                    lang,
-                  },
-                  replace: true,
-                });
-                setState({
-                  ...state,
-                  isLangsMenuOpened: false,
-                });
+            <MenuItem onClick={() => {
+                changePage({ locationSearch: { ...locationSearch, lang, }, replace: true, });
+                setState({ ...state, isLangsMenuOpened: false, });
               }}
               selected={locationSearch.lang === lang}
             >
@@ -277,26 +198,9 @@ function Header({
             </MenuItem>
           ))}
         </Menu>
-        <Menu
-          anchorEl={userMenuRef.current}
-          open={state.isUserMenuOpened}
-          onClose={() => setState({
-            ...state,
-            isUserMenuOpened: false,
-          })}
-        >
-          <MenuItem
-            onClick={() => {
-              setState({
-                ...state,
-                isUserMenuOpened: false,
-              });
-              onLogout();
-            }}
-          >
-            <Typography>
-              {formatMessage({ id: 'signOut' })}
-            </Typography>
+        <Menu anchorEl={userMenuRef.current} open={state.isUserMenuOpened} onClose={() => setState({ ...state, isUserMenuOpened: false, })} >
+          <MenuItem onClick={() => { setState({...state, isUserMenuOpened: false,}); onLogout(); }} >
+            <Typography> {formatMessage({ id: 'signOut' })} </Typography>
           </MenuItem>
         </Menu>
       </div>

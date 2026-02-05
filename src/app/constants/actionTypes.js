@@ -12,3 +12,5 @@ export const REQUEST_SIGN_UP = 'REQUEST_SIGN_UP';
 export const SUCCESS_SIGN_UP = 'SUCCESS_SIGN_UP';
 
 export const REQUEST_SIGN_OUT = 'REQUEST_SIGN_OUT';
+
+export const AUTH_ERROR = 'AUTH_ERROR';

@@ -22,6 +22,7 @@ import * as pages from 'constants/pages';
 import StarIcon from 'components/icons/StarIcon';
 import CategoriesSelect from '../component/CategoriesSelect';
 import { showNotification } from 'app/reducers/notification';
+import { CATEGORIES, COUNTRIES } from '../../../app/constants/filters';
 
 const getClasses = createUseStyles((theme) => ({
   container: { display: 'grid', gap: `${theme.spacing(1)}px`, padding: 16 },
@@ -86,41 +87,36 @@ function Secret() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { currentPost, isFetchingCurrent, isSaving, errorSaving } = useSelector(s => s.posts);
-  const { usersList } = useSelector(s => s.users);
+  const { currentPost, isFetchingCurrent, isSaving } = useSelector(s => s.posts);
 
   const params = useParams();
   const [mode, setMode] = useState(!params.id ? 'create' : 'view');
+
+  const userId = useSelector(state => state.user?.user?.userId);
+  
+  const postAuthorId = currentPost?.author?.id; 
+  const isAuthor = userId && postAuthorId && userId === postAuthorId;
+  console.log("postAuthorId ", postAuthorId);
+  console.log("isAuthor ", isAuthor);
+
+  const allCategories = CATEGORIES;
 
   const [edited, setEdited] = useState({
     title: '',
     content: '',
     country: '',
     categories: [],
+    userId: userId,
   });
   const [errors, setErrors] = useState({});
   const [message, setMessage] = useState(null);
-
-  const [allCategories, setAllCategories] = useState([]);
-
-  useEffect(() => {
-    const stored = storage.getItem(keys.CATEGORIES);
-    if (stored) {
-      setAllCategories(JSON.parse(stored));
-    }
-  }, []);
-
-  const getUserName = (userId) => {
-    const user = usersList.find(u => u.id === userId);
-    return user ? user.name : 'Unknown';
-  };
 
   // Завантаження сутності
   useEffect(() => {
     if (params.id) {
       dispatch(fetchPostById(params.id));
     } else {
-      setEdited({ title: '', content: '', country: '', categories: [] });
+      setEdited({ title: '', content: '', country: '', categories: [], userId: null });
     }
   }, [dispatch, params.id]);
 
@@ -132,6 +128,7 @@ function Secret() {
         content: currentPost.content ?? '',
         country: currentPost.country ?? '',
         categories: Array.isArray(currentPost.categories) ? currentPost.categories : [],
+        userId: userId,
       });
     }
   }, [currentPost]);
@@ -143,7 +140,7 @@ function Secret() {
       dispatch(fetchPostById(params.id));
     } else {
       setMode('create');
-      setEdited({ title: '', content: '', country: '', categories: [] });
+      setEdited({ title: '', content: '', country: '', categories: [], userId: userId });
     }
   }, [params.id, dispatch]);
 
@@ -171,6 +168,7 @@ function Secret() {
           content: currentPost.content ?? '',
           country: currentPost.country ?? '',
           categories: Array.isArray(currentPost.categories) ? currentPost.categories : [],
+          userId: userId,
         });
       }
       setErrors({});
@@ -211,12 +209,12 @@ function Secret() {
   };
 
   const headerActions = useMemo(() => (
-    mode === 'view' ? (
+    mode === 'view' && isAuthor ? (
       <IconButton onClick={onStartEdit} title={formatMessage({ id: 'edit' })}>
         <IconEdit size={36} />
       </IconButton>
     ) : null
-  ), [mode, formatMessage]);
+  ), [mode,isAuthor, formatMessage]);
 
   return (
     <div className={classes.container}>
@@ -236,7 +234,8 @@ function Secret() {
             {headerActions}
           </div>
           <div className={classes.subtitleBlock}>
-            <Typography variant='caption' color='secondary'>{getUserName(currentPost.userId)}</Typography>
+            <Typography variant='caption' color='secondary'>{currentPost?.author?.name || 'Unknown'}</Typography>
+            {/* <Typography variant='caption' color='secondary'>{getUserName(currentPost.userId)}</Typography> */}
             <Typography variant='caption' color='secondary'>{currentPost.createdAt || '-'}</Typography>
           </div>
         <Card>

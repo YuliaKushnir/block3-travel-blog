@@ -1,32 +1,20 @@
 import axios from 'axios';
-import storage, { keys } from '../storage';
+import config from 'config';
 
-axios.interceptors.request.use((params) => {
-  const token = storage.getItem(keys.TOKEN);
-  if (token) {
-    params.headers.setAuthorization(`Bearer ${token}`);
-  }
-  return params;
+const api = axios.create({
+  baseURL: config.BLOG_GATEWAY,
+  withCredentials: true,
 });
 
-const addAxiosInterceptors = ({
-  onSignOut,
-}) => {
-  axios.interceptors.response.use(
-    (response) => response.data,
-    (error) => {
-      if (error.response.data
-        .some(beError => beError?.code === 'INVALID_TOKEN')
-      ) {
-        onSignOut();
-      }
-      throw error.response.data;
+api.interceptors.response.use(
+  response => response,
+  error => {
+    if (error.response?.status === 401) {
+      console.warn('User is not authenticated (401)');
+      window.location.href = `${config.BLOG_GATEWAY}/oauth2/authorization/google`;
     }
-  );
-};
+    return Promise.reject(error);
+  }
+);
 
-export {
-  addAxiosInterceptors,
-};
-
-export default axios;
+export {api}

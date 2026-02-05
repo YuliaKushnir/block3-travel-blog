@@ -56,6 +56,23 @@ npm start
 npm run build
 ```
 
+## Зібрати Docker-image
+
+```sh
+docker build -t tb-frontend .
+```
+
+## Запуск контейнера в мережі shared-net
+
+```sh
+docker run -d --name frontend -p 3050:80 --network shared-net tb-frontend
+
+```
+
+
+
+
+
 ## Використані технології
 - **React** (hooks, компоненти).
 - **Redux** (стан постів, користувачів, повідомлень).

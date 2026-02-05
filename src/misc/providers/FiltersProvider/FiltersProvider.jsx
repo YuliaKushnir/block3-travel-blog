@@ -11,6 +11,7 @@ const defaultFilters = {
 const FiltersProvider = ({
   children,
 }) => {
+  const [ready, setReady] = useState(false);
   const [filters, setFilters ] = useState(() => { 
     const saved = sessionStorage.getItem('FILTERS');
     return saved ? JSON.parse(saved) : defaultFilters;
@@ -18,10 +19,11 @@ const FiltersProvider = ({
 
   useEffect(() => {
     sessionStorage.setItem('FILTERS', JSON.stringify(filters));
+    setReady(true);
   }, [filters]);
 
   return (
-    <FiltersContext.Provider value={{filters, setFilters}}>
+    <FiltersContext.Provider value={{filters, setFilters, ready}}>
       {children}
     </FiltersContext.Provider>
   );

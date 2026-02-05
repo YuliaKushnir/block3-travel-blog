@@ -1,13 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { createUseStyles } from 'react-jss';
 import { useIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import Button from 'components/Button';
-import Typography from 'components/Typography';
 import * as pages from 'constants/pages';
 import pagesURLs from 'constants/pagesURLs';
-import { useDispatch } from 'react-redux';
-import { fetchPosts } from 'app/actions/posts';
 import useTheme from 'misc/hooks/useTheme';
 
 import RatingFilter from './filters/RatingFilter';
@@ -44,17 +41,8 @@ function RightNavBar() {
   const { formatMessage } = useIntl();
   const { theme } = useTheme();
   const classes = getClasses({ theme });
-  const dispatch = useDispatch();
 
   const { filters, setFilters } = useFilters();
-
-  useEffect(() => {
-    dispatch(fetchPosts({
-      minRating: filters.minRating,
-      countries: filters.countries,
-      categories: filters.categories,
-    }));
-  }, [filters, dispatch]);
 
   const handleRatingChange = (value) => {
     setFilters(prev => ({ ...prev, minRating: prev.minRating === value ? null : value }));
