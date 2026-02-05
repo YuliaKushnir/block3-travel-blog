@@ -32,7 +32,7 @@ export default function postsReducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        postsList: action.payload.posts,
+        postsList: action.payload.postsList,
         currentPage: action.payload.page,
         pageSize: action.payload.size,
         totalPages: action.payload.totalPages,

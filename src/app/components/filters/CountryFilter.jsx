@@ -4,6 +4,7 @@ import { createUseStyles } from 'react-jss';
 import storage, { keys } from 'misc/storage';
 import useTheme from 'misc/hooks/useTheme';
 import Button from 'components/Button';
+import { COUNTRIES } from 'app/constants/filters';
 
 const getClasses = createUseStyles((theme) => 
   ({
@@ -23,26 +24,40 @@ function CountryFilter({ filters, setFilters, formatMessage }) {
   const { theme } = useTheme();
   const classes = getClasses({ theme });
   const [showAll, setShowAll] = useState(false);
-  const [allCountries, setAllCountries] = useState([]);
+  // const [allCountries, setAllCountries] = useState([]);
 
-  useEffect(() => {
-    const stored = storage.getItem(keys.COUNTRIES);
-    if (stored) {
-      setAllCountries(JSON.parse(stored));
-    }
-  }, []);
+  // useEffect(() => {
+  //   const stored = storage.getItem(keys.COUNTRIES);
+  //   if (stored) {
+  //     setAllCountries(JSON.parse(stored));
+  //   }
+  // }, []);
 
+  const allCountries = COUNTRIES;
   const visibleCountries = showAll ? allCountries : allCountries.slice(0, 3);
 
   const toggleCountry = (value) => {
     const current = filters.countries || [];
-    const updated = current.includes(value)
-      ? current.filter(c => c !== value)
-      : [...current, value];
+    let updated;
+
+    if(current.includes(value)){
+      updated = [];
+    } else {
+      updated = [value];
+    }
 
     const newFilters = { ...filters, countries: updated };
     setFilters(newFilters);
+    // const current = filters.countries || [];
+    // const updated = current.includes(value)
+    //   ? current.filter(c => c !== value)
+    //   : [...current, value];
+
+    // const newFilters = { ...filters, countries: updated };
+    // setFilters(newFilters);
   };
+
+  
 
   return (
     <div className={classes.filterBlock}>

@@ -1,158 +1,65 @@
 import React, {useEffect, useState} from 'react';
-import {
-  BrowserRouter,
-  Routes,
-  Route,
-} from 'react-router-dom';
-import {
-  useDispatch,
-  useSelector,
-} from 'react-redux';
-import { addAxiosInterceptors } from 'misc/requests';
+import {BrowserRouter, Routes, Route, Navigate,} from 'react-router-dom';
+import { useDispatch, useSelector, } from 'react-redux';
 import * as pages from 'constants/pages';
-import AuthoritiesProvider from 'misc/providers/AuthoritiesProvider';
 import DefaultPage from 'pageProviders/Default';
 import Loading from 'components/Loading';
 import LoginPage from 'pageProviders/Login';
-import PageContainer from 'pageProviders/components/PageContainer';
 import pageURLs from 'constants/pagesURLs';
 import SecretPage from 'pageProviders/Secret';
 import ThemeProvider from 'misc/providers/ThemeProvider';
-import UserProvider from 'misc/providers/UserProvider';
-
-import actionsUser from '../actions/user';
 import Header from '../components/Header';
 import IntlProvider from '../components/IntlProvider';
 import MissedPage from '../components/MissedPage';
 import SearchParamsConfigurator from '../components/SearchParamsConfigurator';
-import { fetchPosts } from 'app/actions/posts';
-import { fetchUsers } from 'app/actions/users';
-import { useInitPosts } from 'misc/hooks/useInitPosts';
-import { useInitUsers } from 'misc/hooks/useInitUsers';
-import { useInitFilters } from 'misc/hooks/useInitFilterFields';
+import { fetchProfile } from 'app/actions/user';
 import FiltersProvider from 'misc/providers/FiltersProvider';
 import Notification from 'pages/secret/component/Notification';
+import Login from 'pages/login/containers/Login';
 
 function App() {
-  const dispatch = useDispatch();
-  const [state, setState] = useState({
-    componentDidMount: false,
-  });
+  const [componentDidMount, setComponentDidMount] = useState(false);
 
-  useInitPosts();
-  useInitUsers();
-  useInitFilters();
+  const dispatch = useDispatch();
+  const { user, isFetchingUser, isAuthenticated } = useSelector(s => s.user);
 
   useEffect(() => {
-    dispatch(fetchPosts());
-    dispatch(fetchUsers());
+    dispatch(fetchProfile());
+    setComponentDidMount(true); 
   }, [dispatch]);
 
-  const {
-    errors,
-    isFailedSignIn,
-    isFailedSignUp,
-    isFetchingSignIn,
-    isFetchingSignUp,
-    isFetchingUser,
-  } = useSelector(({ user }) => user);
-
-  useEffect(() => {
-    addAxiosInterceptors({
-      onSignOut: () => dispatch(actionsUser.fetchSignOut()),
-    });
-    dispatch(actionsUser.fetchUser());
-    setState({
-      ...state,
-      componentDidMount: true,
-    });
-  }, []);
-
   return (
-    <UserProvider>
-      <AuthoritiesProvider>
-        <ThemeProvider>
-          <FiltersProvider>
-            <Notification/>
-          <BrowserRouter>
-            <SearchParamsConfigurator />
-            {/* This is needed to let first render passed for App's
-              * configuration process will be finished (e.g. locationQuery
-              * initializing) */}
-            {state.componentDidMount && (
-              <IntlProvider>
-                <Header onLogout={() => dispatch(actionsUser.fetchSignOut())} />
-                {isFetchingUser && (
-                  <PageContainer>
-                    <Loading />
-                  </PageContainer>
-                )}
-                {!isFetchingUser && (
-                  <Routes>
-                    <Route
-                      element={<DefaultPage />}
-                      path={`${pageURLs[pages.defaultPage]}`}
-                    />
-                    <Route
-                      element={<SecretPage />}
-                      path={`${pageURLs[pages.secretPage]}/new`}
-                    />
-                    <Route
-                      element={<SecretPage />}
-                      path={`${pageURLs[pages.secretPage]}/:id`}
-                    />
-                    <Route
-                      element={(
-                        <LoginPage
-                          errors={errors}
-                          isFailedSignIn={isFailedSignIn}
-                          isFailedSignUp={isFailedSignUp}
-                          isFetchingSignIn={isFetchingSignIn}
-                          isFetchingSignUp={isFetchingSignUp}
-                          onSignIn={({
-                            email,
-                            login,
-                            password,
-                          }) => dispatch(actionsUser.fetchSignIn({
-                            email,
-                            login,
-                            password,
-                          }))}
-                          onSignUp={({
-                            email,
-                            firstName,
-                            lastName,
-                            login,
-                            password,
-                          }) => dispatch(actionsUser.fetchSignUp({
-                            email,
-                            firstName,
-                            lastName,
-                            login,
-                            password,
-                          }))}
-                        />
-                      )}
-                      path={`${pageURLs[pages.login]}`}
-                    />
-                    <Route
-                      element={(
-                        <MissedPage
-                          redirectPage={`${pageURLs[pages.defaultPage]}`}
-                        />
-                      )}
-                      path="*"
-                    />
-                  </Routes>
-                )}
-              </IntlProvider>
-            )}
-          </BrowserRouter>
-          </FiltersProvider>
-        </ThemeProvider>
-      </AuthoritiesProvider>
-    </UserProvider>
-  );
+    <ThemeProvider>
+      <FiltersProvider>
+        <Notification/>
+        <BrowserRouter>
+          <SearchParamsConfigurator/>
+          {(!componentDidMount || isFetchingUser) ? (
+            <Loading/>
+          ) : (
+            <IntlProvider>
+              <Header/>
+                <Routes>
+                  {!isAuthenticated ? (
+                    <Route element={<Navigate to="/login" replace />} path='*' /> 
+                  ) : (
+                    <>
+                      {/* <Route element={<Login />} path='/login' /> */}
+                      <Route element={<DefaultPage />} path={`${pageURLs[pages.defaultPage]}`} />
+                      <Route element={<SecretPage />} path={`${pageURLs[pages.secretPage]}/new`} />
+                      <Route element={<SecretPage />} path={`${pageURLs[pages.secretPage]}/:id`} />
+                      <Route element={( <LoginPage/> )} path={`${pageURLs[pages.login]}`} />
+                      <Route element={( <MissedPage redirectPage={`${pageURLs[pages.defaultPage]}`} /> )} path="*" />
+                    </>
+                  )}
+                </Routes>
+            </IntlProvider>
+          )}
+        </BrowserRouter>
+
+      </FiltersProvider>
+    </ThemeProvider>
+  )
 }
 
 export default App;

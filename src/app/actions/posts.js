@@ -1,4 +1,4 @@
-import axios from "misc/requests";
+import  {api} from "misc/requests";
 import config from "config";
 import storage, {keys} from "misc/storage";
 
@@ -11,7 +11,7 @@ import {
 
 } from "../constants/postsActionTypes";
 
-const { BLOG_SERVICE } = config;
+const { BLOG_GATEWAY, POST_SERVICE, } = config;
 
 const getStoredPosts = () => {
   const stored = storage.getItem(keys.POSTS);
@@ -53,17 +53,18 @@ export const fetchPosts = ({
   countries = [],
   categories = [],
 } = {}) => (dispatch) => {
+
   dispatch(requestPosts());
 
   const postQueryDto = {
-    from: page * size,
+    from: page,
     size,
     minRating,
     country: countries.length ? countries.join(',') : null,
     category: categories.length ? categories.join(',') : null,
   };
 
-  return axios.post(`${BLOG_SERVICE}/posts/_list`, postQueryDto)
+  return api.post(`${BLOG_GATEWAY}${POST_SERVICE}/_list`, postQueryDto)
     .catch(() => {
       let filteredPosts = getStoredPosts();
 
@@ -79,29 +80,32 @@ export const fetchPosts = ({
         );
       }
 
-      const totalCount = filteredPosts.length;
-      const totalPages = Math.ceil(totalCount / size) || 1;
+      const totalElements = filteredPosts.length;
+      const totalPages = Math.ceil(totalElements / size) || 1;
       const start = page * size;
       const end = start + size;
-      const pageItems = filteredPosts.slice(start, end);
+      const list = filteredPosts.slice(start, end);
+      console.log("post list in catch ", list);
 
-      return { items: pageItems, totalCount, totalPages };
+      return { list, totalElements, totalPages };
     })
-    .then(({ items, totalCount, totalPages }) => {
-      const pageItems = Array.isArray(items) ? items : [];
-      const count = totalCount ?? pageItems.length;
-      const pages = totalPages ?? (Math.ceil(count / size) || 1);
+    .then((res) => {
+      const postsList = res?.data?.list ?? res.list ?? [];
+      const totalCount = res?.data?.totalElements ?? res.totalElements ?? postsList.length;
+      const pages = res?.data?.totalPages ?? res.totalPages ?? (Math.ceil(totalCount / size) || 1);
 
-      dispatch(receivePosts({ posts: pageItems, page, size, totalPages: pages, totalCount: count }));
+      console.log("postList in then ", postsList);
+
+      dispatch(receivePosts({ postsList, page, size, totalPages: pages, totalCount }));
     })
     .catch((errors) => dispatch(errorPosts(errors)));
 };
 
+
 //3.2
 export const deletePost = (id) => (dispatch) => {
   dispatch(requestDeletePost());
-
-  return axios.delete(`${BLOG_SERVICE}/posts/${id}`)
+  return api.delete(`${BLOG_GATEWAY}${POST_SERVICE}/${id}`)
     .catch(() => {
       const posts = getStoredPosts();
 
@@ -126,7 +130,7 @@ export const deletePost = (id) => (dispatch) => {
 // 4.2
 export const fetchPostById = (id) => (dispatch) => {
   dispatch(requestPost());
-  return axios.get(`${BLOG_SERVICE}/posts/${id}`)
+  return api.get(`${BLOG_GATEWAY}${POST_SERVICE}/${id}`)
     .catch(() => {
       const posts = getStoredPosts();
       const post = posts.find(p => String(p.id) === String(id));
@@ -135,7 +139,8 @@ export const fetchPostById = (id) => (dispatch) => {
       }
       return Promise.reject([{code: 'NOT_FOUND' }]);      
     })
-    .then(({ data }) => {
+    .then((resp) => {
+      const data = resp?.data ?? resp;
       dispatch(receivePost(data));
     })
     .catch((error) => {
@@ -147,7 +152,7 @@ export const updatePostById = (id, dto) => (dispatch) => {
   dispatch(requestUpdatePost());
   const posts = getStoredPosts();
 
-  return axios.put(`${BLOG_SERVICE}/posts/${id}`, dto)
+  return api.put(`${BLOG_GATEWAY}${POST_SERVICE}/${id}`, dto)
     .catch(() => {
       const idx = posts.findIndex(p => String(p.id) === String(id));
       if (idx >= 0) {
@@ -161,7 +166,8 @@ export const updatePostById = (id, dto) => (dispatch) => {
       }
       return Promise.reject([{ code: "UPDATE_FAILED" }]);
     })
-    .then(({ data }) => {
+    .then((resp) => {
+      const data = resp?.data ?? resp;
       dispatch(receiveUpdatePost(data));
     })
     .catch((error) => {
@@ -173,7 +179,7 @@ export const updatePostById = (id, dto) => (dispatch) => {
 export const createPost = (dto) => (dispatch) => {
   dispatch(requestCreatePost());
 
-  return axios.post(`${BLOG_SERVICE}/posts`, dto)
+  return api.post(`${BLOG_GATEWAY}${POST_SERVICE}`, dto)
     .catch(() => {
       const tempId = Date.now();
       const today = new Date();
@@ -194,7 +200,8 @@ export const createPost = (dto) => (dispatch) => {
 
       return { data: createdPost };
     })
-    .then(({ data }) => {
+    .then((resp) => {
+      const data = resp?.data ?? resp;
       dispatch(receiveCreatePost(data));
       return data;
     })

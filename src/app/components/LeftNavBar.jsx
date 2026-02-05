@@ -11,7 +11,7 @@ import pagesURLs from 'constants/pagesURLs';
 import React, { useMemo, useState } from 'react';
 import SwipeableDrawer from 'components/SwipeableDrawer';
 import Typography from 'components/Typography';
-import useAccessValidate from 'misc/hooks/useAccessValidate';
+// import useAccessValidate from 'misc/hooks/useAccessValidate';
 import useTheme from 'misc/hooks/useTheme';
 
 const getClasses = createUseStyles((theme) => ({
@@ -20,19 +20,19 @@ const getClasses = createUseStyles((theme) => ({
   },
 }));
 
-const menuItems = [
-  {
-    icon: <IconLockOpen />,
-    link: `${pagesURLs[pages.secretPage]}`,
-    neededAuthorities: [authorities.ENABLE_SEE_SECRET_PAGE],
-    titleIntlId: `page.${pages.secretPage}`,
-  },
-];
+// const menuItems = [
+//   {
+//     icon: <IconLockOpen />,
+//     link: `${pagesURLs[pages.secretPage]}`,
+//     neededAuthorities: [authorities.ENABLE_SEE_SECRET_PAGE],
+//     titleIntlId: `page.${pages.secretPage}`,
+//   },
+// ];
 
 function LeftNavBar() {
   const { formatMessage } = useIntl();
   const { theme } = useTheme();
-  const accessValidate = useAccessValidate();
+  // const accessValidate = useAccessValidate();
   const classes = getClasses({ theme });
   const [state, setState] = useState({
     isNavMenuOpened: false,
@@ -43,11 +43,8 @@ function LeftNavBar() {
     isNavMenuOpened: false,
   });
 
-  const filteredItems = useMemo(
-    () => menuItems.filter(item => accessValidate(item.neededAuthorities)),
-    [accessValidate],
-  );
-
+  const filteredItems =[];
+  
   if (!filteredItems.length) {
     return;
   }

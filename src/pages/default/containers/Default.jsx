@@ -70,24 +70,28 @@ function Default() {
   const { formatMessage } = useIntl();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { filters } = useFilters();
+  const { filters, ready } = useFilters();
 
   const { postsList, isLoading,  deleteSuccess, deleteError, totalPages } = useSelector(s => s.posts);
 
-  const { page: pageParam, size: sizeParam } = useLocationSearch();
-  const currentPage = Number(pageParam) || 1;
-  const pageSize = Number(sizeParam) || 10;
+  const { page: currentPage, size: pageSize } = useLocationSearch();
 
+  const currentUserId = useSelector(s => s.user?.user?.userId);
+    
   useEffect(() => {
+    if(!ready) return;
+
     dispatch(fetchPosts({ 
       page: currentPage - 1, 
       size: pageSize,
       minRating: filters.minRating,
       countries: filters.countries,
       categories: filters.categories,
-    }));
-    // dispatch(fetchUsers());
-  }, [dispatch, currentPage, pageSize, filters]);
+    }))
+    .catch(err => console.error("Error fetching posts", err));
+
+    dispatch(fetchUsers());
+  }, [ready, dispatch, currentPage, pageSize, filters]);
 
 
   const { usersList } = useSelector(s => s.users);
@@ -108,6 +112,8 @@ function Default() {
     const user = usersList.find(u => u.id === userId);
     return user ? user.name : 'Unknown';
   }
+
+  const isOwner = (post) => currentUserId && post.userId === currentUserId;
 
   const handleDeleteClick = (post) => {
     setSelectedPost(post);
@@ -134,8 +140,6 @@ function Default() {
     if (currentPage < totalPages) goToPage(currentPage + 1);
   };
 
-
-
   return (
     <div className={classes.container}>
       <RightNavBar />
@@ -158,6 +162,7 @@ function Default() {
               <div className={classes.cardBlock}>
                 <Typography variant="subtitle" >{formatMessage({ id: 'country' })}: {post.country}</Typography>
                 <Typography variant="subtitle">{formatMessage({ id: 'author' })}: {getUserName(post.userId)}</Typography>
+                {/* <Typography variant="subtitle">{formatMessage({ id: 'author' })}: {post?.author?.name || 'Unknown'}</Typography> */}
               </div>
               <div className={classes.cardBlock}>
                 <Typography variant="default">{post.categories.join(', ')}</Typography>
@@ -168,11 +173,14 @@ function Default() {
               </div>
             </CardContent>
           </Link>
+
+          {isOwner(post) && (
           <CardActions>
             <IconButton onClick={() => handleDeleteClick(post)} className={classes.deleteButton}>
               <Delete />
             </IconButton>
           </CardActions>
+          )}
         </Card>
       ))}
       </div>
