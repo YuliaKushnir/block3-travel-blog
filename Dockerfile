@@ -7,7 +7,7 @@ RUN npm ci
 
 COPY . .
 
-ENV REACT_APP_BLOG_GATEWAY=""
+ENV REACT_APP_BLOG_GATEWAY="http://34.118.68.15.nip.io"
 RUN npm run build
 
 FROM nginx:alpine
