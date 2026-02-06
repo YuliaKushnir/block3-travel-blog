@@ -120,7 +120,7 @@ function Header({
       acc.push(item);
       return acc;
     }, []);
-  }, [user, isAuthenticated, isFetchingUser, currentPage]);
+  }, [ isAuthenticated, isFetchingUser, currentPage]);
 
   return (
     <div className={classes.container}>
