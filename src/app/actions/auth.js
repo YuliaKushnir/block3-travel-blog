@@ -1,4 +1,4 @@
-import config from 'config';
+// import config from 'config';
 
 export async function login() {
     window.location.href = `/oauth2/authorization/google`;
