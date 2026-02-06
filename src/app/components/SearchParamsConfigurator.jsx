@@ -25,7 +25,7 @@ function SearchParamsConfigurator() {
     if (isSearchParamsUpdated) {
       setSearchParams(searchParams, { replace: true });
     }
-  }, [searchParams]);
+  }, [searchParams, setSearchParams]);
 }
 
 export default SearchParamsConfigurator;

@@ -8,7 +8,7 @@ on:
       skip_deploy:
         description: 'Skip deployment trigger'
         required: false
-        default: 'false'
+        default: false
         type: boolean
 
 env:

@@ -15,13 +15,12 @@ import SearchParamsConfigurator from '../components/SearchParamsConfigurator';
 import { fetchProfile } from 'app/actions/user';
 import FiltersProvider from 'misc/providers/FiltersProvider';
 import Notification from 'pages/secret/component/Notification';
-import Login from 'pages/login/containers/Login';
 
 function App() {
   const [componentDidMount, setComponentDidMount] = useState(false);
 
   const dispatch = useDispatch();
-  const { user, isFetchingUser, isAuthenticated } = useSelector(s => s.user);
+  const { isFetchingUser, isAuthenticated } = useSelector(s => s.user);
 
   useEffect(() => {
     dispatch(fetchProfile());

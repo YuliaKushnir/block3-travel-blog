@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import useTheme from 'misc/hooks/useTheme';
-import storage, { keys } from 'misc/storage';
 
 import Button from 'components/Button';
 import Card from 'components/Card';
@@ -22,7 +21,7 @@ import * as pages from 'constants/pages';
 import StarIcon from 'components/icons/StarIcon';
 import CategoriesSelect from '../component/CategoriesSelect';
 import { showNotification } from 'app/reducers/notification';
-import { CATEGORIES, COUNTRIES } from '../../../app/constants/filters';
+import { CATEGORIES } from '../../../app/constants/filters';
 
 const getClasses = createUseStyles((theme) => ({
   container: { display: 'grid', gap: `${theme.spacing(1)}px`, padding: 16 },
@@ -131,7 +130,7 @@ function Secret() {
         userId: userId,
       });
     }
-  }, [currentPost]);
+  }, [currentPost, userId]);
 
   // Перемикання режиму при зміні params.id
   useEffect(() => {
@@ -142,7 +141,7 @@ function Secret() {
       setMode('create');
       setEdited({ title: '', content: '', country: '', categories: [], userId: userId });
     }
-  }, [params.id, dispatch]);
+  }, [params.id, dispatch, userId]);
 
   // Автоматичне очищення повідомлення
   useEffect(() => {

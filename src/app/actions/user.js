@@ -2,7 +2,6 @@ import { api } from 'misc/requests';
 import {
   REQUEST_USER,
   RECEIVE_USER,
-  AUTH_ERROR,
 } from '../constants/actionTypes';
 import config from 'config';
 

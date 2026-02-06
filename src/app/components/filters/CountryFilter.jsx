@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Typography from 'components/Typography';
 import { createUseStyles } from 'react-jss';
-import storage, { keys } from 'misc/storage';
 import useTheme from 'misc/hooks/useTheme';
 import Button from 'components/Button';
 import { COUNTRIES } from 'app/constants/filters';

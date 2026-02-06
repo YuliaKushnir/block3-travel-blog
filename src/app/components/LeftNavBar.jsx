@@ -1,14 +1,10 @@
 import { createUseStyles } from 'react-jss';
 import { useIntl } from 'react-intl';
-import * as authorities from 'constants/authorities';
-import * as pages from 'constants/pages';
 import IconButton from 'components/IconButton/IconButton';
-import IconLockOpen from 'components/icons/LockOpen';
 import IconMenu from 'components/icons/Menu';
 import Link from 'components/Link';
 import MenuItem from 'components/MenuItem';
-import pagesURLs from 'constants/pagesURLs';
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import SwipeableDrawer from 'components/SwipeableDrawer';
 import Typography from 'components/Typography';
 // import useAccessValidate from 'misc/hooks/useAccessValidate';
