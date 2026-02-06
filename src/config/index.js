@@ -1,6 +1,5 @@
 const config = {
-  // BLOG_GATEWAY: process.env.REACT_APP_BLOG_GATEWAY || 'http://localhost:1000',
-  BLOG_GATEWAY: 'http://34.118.68.15.nip.io',
+  BLOG_GATEWAY: process.env.REACT_APP_BLOG_GATEWAY || 'http://localhost:1000',
   POST_SERVICE: process.env.REACT_APP_POST_SERVICE || '/api/post',
   USER_SERVICE: process.env.REACT_APP_USER_SERVICE || '/api/user',
   COMMENT_SERVICE: process.env.REACT_APP_COMMENT_SERVICE || '/api/comment',

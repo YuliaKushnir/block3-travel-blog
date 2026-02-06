@@ -11,7 +11,7 @@ import {
 
 } from "../constants/postsActionTypes";
 
-const { BLOG_GATEWAY, POST_SERVICE, } = config;
+const { POST_SERVICE, } = config;
 
 const getStoredPosts = () => {
   const stored = storage.getItem(keys.POSTS);
@@ -64,7 +64,7 @@ export const fetchPosts = ({
     category: categories.length ? categories.join(',') : null,
   };
 
-  return api.post(`${BLOG_GATEWAY}${POST_SERVICE}/_list`, postQueryDto)
+  return api.post(`${POST_SERVICE}/_list`, postQueryDto)
     .catch(() => {
       let filteredPosts = getStoredPosts();
 
@@ -105,7 +105,7 @@ export const fetchPosts = ({
 //3.2
 export const deletePost = (id) => (dispatch) => {
   dispatch(requestDeletePost());
-  return api.delete(`${BLOG_GATEWAY}${POST_SERVICE}/${id}`)
+  return api.delete(`${POST_SERVICE}/${id}`)
     .catch(() => {
       const posts = getStoredPosts();
 
@@ -130,7 +130,7 @@ export const deletePost = (id) => (dispatch) => {
 // 4.2
 export const fetchPostById = (id) => (dispatch) => {
   dispatch(requestPost());
-  return api.get(`${BLOG_GATEWAY}${POST_SERVICE}/${id}`)
+  return api.get(`${POST_SERVICE}/${id}`)
     .catch(() => {
       const posts = getStoredPosts();
       const post = posts.find(p => String(p.id) === String(id));
@@ -152,7 +152,7 @@ export const updatePostById = (id, dto) => (dispatch) => {
   dispatch(requestUpdatePost());
   const posts = getStoredPosts();
 
-  return api.put(`${BLOG_GATEWAY}${POST_SERVICE}/${id}`, dto)
+  return api.put(`${POST_SERVICE}/${id}`, dto)
     .catch(() => {
       const idx = posts.findIndex(p => String(p.id) === String(id));
       if (idx >= 0) {
@@ -179,7 +179,7 @@ export const updatePostById = (id, dto) => (dispatch) => {
 export const createPost = (dto) => (dispatch) => {
   dispatch(requestCreatePost());
 
-  return api.post(`${BLOG_GATEWAY}${POST_SERVICE}`, dto)
+  return api.post(`${POST_SERVICE}`, dto)
     .catch(() => {
       const tempId = Date.now();
       const today = new Date();

@@ -6,7 +6,7 @@ import {
   REQUEST_CREATE_COMMENT, RECEIVE_CREATE_COMMENT, ERROR_CREATE_COMMENT,
 } from "../constants/commentsActionTypes";
 
-const { BLOG_GATEWAY, COMMENT_SERVICE } = config;
+const { COMMENT_SERVICE } = config;
 
 const requestComments = () => ({ type: REQUEST_COMMENTS });
 const receiveComments = (comments) => ({ type: RECEIVE_COMMENTS, payload: comments });
@@ -19,7 +19,7 @@ export const errorCreateComment = (error) => ({ type: ERROR_CREATE_COMMENT, erro
 export const fetchCommentsByPostId = (postId, size = 10, from = 0) => (dispatch) => {
   dispatch(requestComments());
 
-  return api.get(`${BLOG_GATEWAY}${COMMENT_SERVICE}?postId=${postId}&size=${size}&from=${from}`)
+  return api.get(`${COMMENT_SERVICE}?postId=${postId}&size=${size}&from=${from}`)
     .then((res) => {
       const comments = res?.data ?? [];
       dispatch(receiveComments(comments));
@@ -32,7 +32,7 @@ export const fetchCommentsByPostId = (postId, size = 10, from = 0) => (dispatch)
 export const createComment = (dto) => (dispatch) => {
   dispatch(requestCreateComment());
 
-  return api.post(`${BLOG_GATEWAY}${COMMENT_SERVICE}`, dto)
+  return api.post(`${COMMENT_SERVICE}`, dto)
     .then((res) => {
       const comment = res?.data ?? dto;
       dispatch(receiveCreateComment(comment));

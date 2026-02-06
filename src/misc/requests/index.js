@@ -1,8 +1,8 @@
 import axios from 'axios';
-import config from 'config';
+// import config from 'config';
 
 const api = axios.create({
-  baseURL: config.BLOG_GATEWAY,
+  baseURL: "",
   withCredentials: true,
 });
 
@@ -11,7 +11,7 @@ api.interceptors.response.use(
   error => {
     if (error.response?.status === 401) {
       console.warn('User is not authenticated (401)');
-      window.location.href = `${config.BLOG_GATEWAY}/oauth2/authorization/google`;
+      window.location.href = `/oauth2/authorization/google`;
     }
     return Promise.reject(error);
   }

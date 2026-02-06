@@ -1,7 +1,7 @@
 import config from 'config';
 
 export async function login() {
-    window.location.href = `${config.BLOG_GATEWAY}/oauth2/authorization/google`;
+    window.location.href = `/oauth2/authorization/google`;
 }
 
 // export async function logout() {

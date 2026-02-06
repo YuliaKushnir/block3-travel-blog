@@ -7,7 +7,7 @@ import {
 import config from 'config';
 import {api} from 'misc/requests';
 
-const { BLOG_GATEWAY, USER_SERVICE } = config;
+const { USER_SERVICE } = config;
 
 export const requestUsers = () => ({ type: REQUEST_USERS, });
 export const receiveUsers = (users) => ({ type: RECEIVE_USERS, payload: users, });
@@ -16,7 +16,7 @@ export const errorUsers = (error) => ({ type: ERROR_USERS, error, });
 export const fetchUsers = () => (dispatch) => {
   dispatch(requestUsers());
 
-  return api.get(`${BLOG_GATEWAY}${USER_SERVICE}`)
+  return api.get(`${USER_SERVICE}`)
     .catch(() => {
       const storedUsers = storage.getItem(keys.USERS);
       return { data: storedUsers ? JSON.parse(storedUsers) : [] };

@@ -3,7 +3,6 @@ import {
   REQUEST_USER,
   RECEIVE_USER,
 } from '../constants/actionTypes';
-import config from 'config';
 
 export const fetchProfile = () => async (dispatch) => {
   dispatch({ type: REQUEST_USER });
@@ -15,7 +14,7 @@ export const fetchProfile = () => async (dispatch) => {
   } catch (e) {
     // if (e.response?.status === 401 || e.response?.status === 302) {
       // dispatch({ type: AUTH_ERROR });
-      window.location.href = `${config.BLOG_GATEWAY}/oauth2/authorization/google`;
+      window.location.href = `/oauth2/authorization/google`;
     // } 
   }
 };
