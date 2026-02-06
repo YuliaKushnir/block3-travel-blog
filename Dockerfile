@@ -7,7 +7,7 @@ RUN npm ci
 
 COPY . .
 
-ENV REACT_APP_API_URL=""
+ENV REACT_APP_BLOG_GATEWAY=""
 RUN npm run build
 
 FROM nginx:alpine
