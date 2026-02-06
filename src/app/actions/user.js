@@ -13,11 +13,10 @@ export const fetchProfile = () => async (dispatch) => {
     dispatch({ type: RECEIVE_USER, payload: res.data });
     return res.data;
   } catch (e) {
-    // if (e.response?.status === 401 || e.response?.status === 302) {
+    if (e.response?.status === 401) {
       // dispatch({ type: AUTH_ERROR });
       login();
       // window.location.href = `http://34.118.68.15.nip.io/oauth2/authorization/google`;
-
-    // } 
+    } 
   }
 };
