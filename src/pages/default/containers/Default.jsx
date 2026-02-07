@@ -21,7 +21,6 @@ import RightNavBar from 'app/components/RightNavBar';
 import useLocationSearch from 'misc/hooks/useLocationSearch';
 import { useFilters } from 'misc/providers/FiltersProvider';
 import StarIcon from 'components/icons/StarIcon';
-import { fetchProfile } from 'app/actions/user';
 
 const getClasses = createUseStyles((theme) => ({
   container: { display: 'grid', gap: `${theme.spacing(5)}px`, padding: 16 },
@@ -72,16 +71,6 @@ function Default() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { filters, ready } = useFilters();
-
-    const [setComponentDidMount] = useState(false);
-  
-    const {  isFetchingUser } = useSelector(s => s.user);
-  
-    useEffect(() => {
-      dispatch(fetchProfile());
-      setComponentDidMount(true); 
-    }, [dispatch, setComponentDidMount]);
-    console.log(isFetchingUser);
 
   const { postsList, isLoading,  deleteSuccess, deleteError, totalPages } = useSelector(s => s.posts);
 
