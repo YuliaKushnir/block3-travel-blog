@@ -80,7 +80,7 @@ function Default() {
     useEffect(() => {
       dispatch(fetchProfile());
       setComponentDidMount(true); 
-    }, [dispatch]);
+    }, [dispatch, setComponentDidMount]);
     console.log(isFetchingUser);
 
   const { postsList, isLoading,  deleteSuccess, deleteError, totalPages } = useSelector(s => s.posts);

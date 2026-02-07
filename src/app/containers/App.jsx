@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {BrowserRouter, Routes, Route, Navigate,} from 'react-router-dom';
+import {BrowserRouter, Routes, Route,} from 'react-router-dom';
 import { useDispatch, useSelector, } from 'react-redux';
 import * as pages from 'constants/pages';
 import DefaultPage from 'pageProviders/Default';
 import Loading from 'components/Loading';
-import LoginPage from 'pageProviders/Login';
+// import LoginPage from 'pageProviders/Login';
 import pageURLs from 'constants/pagesURLs';
 import SecretPage from 'pageProviders/Secret';
 import ThemeProvider from 'misc/providers/ThemeProvider';
@@ -20,7 +20,7 @@ function App() {
   const [componentDidMount, setComponentDidMount] = useState(false);
 
   const dispatch = useDispatch();
-  const { isFetchingUser, isAuthenticated } = useSelector(s => s.user);
+  const { isFetchingUser, } = useSelector(s => s.user);
 
   useEffect(() => {
     dispatch(fetchProfile());
