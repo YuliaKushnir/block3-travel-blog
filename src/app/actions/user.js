@@ -16,7 +16,8 @@ export const fetchProfile = () => async (dispatch) => {
     // if (e.response?.status === 401 || e.response?.status === 302) {
       // dispatch({ type: AUTH_ERROR });
       // login();
-      window.location.href = `/oauth2/authorization/google`;
+      window.location.href = `http://34.118.68.15.nip.io/oauth2/authorization/google`;
+
     // } 
   }
 };

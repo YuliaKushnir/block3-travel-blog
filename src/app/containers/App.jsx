@@ -39,18 +39,10 @@ function App() {
             <IntlProvider>
               <Header/>
                 <Routes>
-                  {!isAuthenticated ? (
-                    <Route element={<Navigate to="/login" replace />} path='*' /> 
-                  ) : (
-                    <>
-                      {/* <Route element={<Login />} path='/login' /> */}
-                      <Route element={<DefaultPage />} path={`${pageURLs[pages.defaultPage]}`} />
+                  <Route element={<DefaultPage />} path={`${pageURLs[pages.defaultPage]}`} />
                       <Route element={<SecretPage />} path={`${pageURLs[pages.secretPage]}/new`} />
                       <Route element={<SecretPage />} path={`${pageURLs[pages.secretPage]}/:id`} />
-                      <Route element={( <LoginPage/> )} path={`${pageURLs[pages.login]}`} />
                       <Route element={( <MissedPage redirectPage={`${pageURLs[pages.defaultPage]}`} /> )} path="*" />
-                    </>
-                  )}
                 </Routes>
             </IntlProvider>
           )}

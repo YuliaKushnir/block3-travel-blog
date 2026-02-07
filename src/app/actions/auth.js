@@ -1,7 +1,7 @@
 // import config from 'config';
 
 export async function login() {
-    window.location.href = `/oauth2/authorization/google`;
+    window.location.href = `http://34.118.68.15.nip.io/oauth2/authorization/google`;
         // window.location.href = `http://34.118.68.15.nip.io/oauth2/authorization/google`;
 
 }
