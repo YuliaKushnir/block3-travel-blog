@@ -17,7 +17,6 @@ export const fetchProfile = () => async (dispatch) => {
       // dispatch({ type: AUTH_ERROR });
       // login();
       window.location.href = `/oauth2/authorization/google`;
-
     // } 
   }
 };
