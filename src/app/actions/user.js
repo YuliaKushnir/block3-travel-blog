@@ -3,7 +3,7 @@ import {
   REQUEST_USER,
   RECEIVE_USER,
 } from '../constants/actionTypes';
-import { login } from './auth';
+// import { login } from './auth';
 
 export const fetchProfile = () => async (dispatch) => {
   dispatch({ type: REQUEST_USER });
