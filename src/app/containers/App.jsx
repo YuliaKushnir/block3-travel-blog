@@ -12,7 +12,7 @@ import Header from '../components/Header';
 import IntlProvider from '../components/IntlProvider';
 import MissedPage from '../components/MissedPage';
 import SearchParamsConfigurator from '../components/SearchParamsConfigurator';
-// import { fetchProfile } from 'app/actions/user';
+import { fetchProfile } from 'app/actions/user';
 import FiltersProvider from 'misc/providers/FiltersProvider';
 import Notification from 'pages/secret/component/Notification';
 
@@ -23,7 +23,7 @@ function App() {
   const { isFetchingUser } = useSelector(s => s.user);
 
   useEffect(() => {
-    // dispatch(fetchProfile());
+    dispatch(fetchProfile());
     setComponentDidMount(true); 
   }, [dispatch]);
 
