@@ -11,7 +11,7 @@ api.interceptors.response.use(
   error => {
     if (error.response?.status === 401) {
       console.warn('User is not authenticated (401)');
-      window.location.href = `http://34.118.68.15.nip.io/oauth2/authorization/google`;
+      // window.location.href = `http://34.118.68.15.nip.io/oauth2/authorization/google`;
     }
     return Promise.reject(error);
   }
