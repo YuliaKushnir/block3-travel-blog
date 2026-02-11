@@ -10,7 +10,6 @@ export const CATEGORIES = [
   'nature',
   'shopping',
   'spirituality',
-  'sport',
   'photography',
   'wildlife',
 ];
@@ -34,6 +33,4 @@ export const COUNTRIES = [
   'Australia',
   'Cuba',
   'Philippines',
-  'Finland',
-  'South Africa',
 ];

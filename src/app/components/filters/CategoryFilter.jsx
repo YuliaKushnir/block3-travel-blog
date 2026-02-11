@@ -24,14 +24,6 @@ function CategoryFilter({ filters, setFilters, formatMessage }) {
   const classes = getClasses({ theme });
 
   const [showAll, setShowAll] = useState(false);
-  // const [allCategories, setAllCategories] = useState([]);
-
-  // useEffect(() => {
-  //   const stored = storage.getItem(keys.CATEGORIES);
-  //   if (stored) {
-  //     setAllCategories(JSON.parse(stored));
-  //   }
-  // }, []);
 
   const allCategories = CATEGORIES;
 
